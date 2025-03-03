@@ -6,21 +6,17 @@ class MissionController {
   }
 
   async createMission(req, res, next) {
-    let fullname, mail, password, isAssociation;
-    try {
-      ({ fullname, mail, password, isAssociation } = req.body);
-    } catch (err) {
-      console.error(err);
-      next(new IncompleteReqException(400));
+    if (!req.body?.title || !req.body.description || !req.body.associationId) {
+      res.status(400).json({ message: "Error : Bad Request Body" });
     }
+    const { title, description, associationId } = req.body;
     try {
-      let aission = this.service.createMission(
-        fullname,
-        mail,
-        password,
-        isAssociation
+      let mission = this.service.createMission(
+        title,
+        description,
+        associationId
       );
-      res.status(201).json(aission);
+      res.status(201).json(mission);
     } catch (err) {
       next(err);
     }

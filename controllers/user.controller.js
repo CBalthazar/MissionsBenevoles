@@ -8,7 +8,7 @@ class UserController {
   }
 
   async createUser(req, res, next) {
-    if (!req.body.fullname || !req.body.mail || req.body.password) {
+    if (!req.body?.fullname || !req.body.mail || !req.body.password) {
       res.status(400).json({ message: "Error : Bad Request Body" });
     }
     const { fullname, mail, password } = req.body;
@@ -41,7 +41,7 @@ class UserController {
       console.log("error while logging, user could not be fetched");
     }
 
-    if (!user || !(await argon2.verify(user.password, password))) {
+    if (!user || !(await argon2.verify(user[0].password, password))) {
       return res.status(401).json({ message: "Identifiants incorrects" });
     }
 
@@ -56,7 +56,7 @@ class UserController {
       expires: new Date(Date.now() + 60 * 60 * 1000),
     });
 
-    res.status(200).json({ user: username });
+    res.status(200).json({ user: user });
   }
 
   async logoutUser(req, res, next) {
@@ -76,6 +76,7 @@ class UserController {
       let user = await this.service.readUser({ id: id });
       res.status(200).json(user);
     } catch (err) {
+      console.error(err);
       next(err);
     }
   }

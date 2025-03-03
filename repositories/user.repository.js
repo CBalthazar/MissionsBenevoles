@@ -7,7 +7,7 @@ class UserRepository {
     try {
       conn = await pool.getConnection();
       const user = await conn.query(
-        "INSERT INTO Users values (?, ?, ?, ?, ?) RETURNING (id, fullname, mail)",
+        "INSERT INTO Users VALUES (?, ?, ?, ?, ?) RETURNING id, fullname, mail",
         [id, fullname, mail, password, isAssociation]
       );
       return user;
@@ -39,11 +39,10 @@ class UserRepository {
     try {
       conn = await pool.getConnection();
       const sql = Object.entries(modified)
-        .map((entry) => `${entry[0]}=${entry[1]}`)
+        .map((entry) => `${entry[0]}="${entry[1]}"`)
         .join(", ");
-      const result = await conn.query(`UPDATE Users SET ${sql} WHERE id=?`, [
-        id,
-      ]);
+      await conn.query(`UPDATE Users SET ${sql} WHERE id=?`, [id]);
+      return this.readUser({ id: id });
     } catch (err) {
       throw err;
     }
@@ -57,7 +56,8 @@ class UserRepository {
       conn.query("DELETE FROM Users WHERE id=?", [id]);
       return true;
     } catch (err) {
-      throw err;
+      console.error(err);
+      throw new DBException(400, "error while deleting user");
     }
   }
 }

@@ -6,8 +6,7 @@ class UserService {
   }
 
   createUser(fullname, mail, password, isAssociation) {
-    // gerer id et password
-    let id = "maisnonincr";
+    let id = Math.floor(Math.random() * 1000000).toString();
     return this.repository.createUser(
       id,
       fullname,
@@ -17,16 +16,16 @@ class UserService {
     );
   }
 
-  async readUser(cond) {
-    this.repository.readUser(cond);
+  readUser(cond) {
+    return this.repository.readUser(cond);
   }
 
   async updateUser(id, modifications) {
-    this.repository.updateUser(id, modifications);
+    return this.repository.updateUser(id, modifications);
   }
 
   async deleteUser(id) {
-    this.repository.deleteUser(id);
+    return this.repository.deleteUser(id);
   }
 }
 

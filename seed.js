@@ -1,4 +1,5 @@
 import { createPool } from "mariadb";
+import "dotenv/config";
 
 const pool = createPool({
   host: process.env.HOST,
@@ -9,34 +10,34 @@ const pool = createPool({
 });
 
 const sql_tables = `
-USE ${process.env.DATABASE}
+USE ${process.env.DATABASE};
 
+DROP TABLE IF EXISTS Candidatures;
+DROP TABLE IF EXISTS  Missions;
+DROP TABLE  IF EXISTS Users;
 -- create
 CREATE TABLE Users (
-  id string PRIMARY KEY,
-  fullname string NOT NULL,
-  mail string NOT NULL,
-  password string NOT NULL,
+  id varchar(50) PRIMARY KEY,
+  fullname varchar(50) NOT NULL,
+  mail varchar(50) NOT NULL,
+  password varchar(50) NOT NULL,
   isAssossiation boolean NOT NULL DEFAULT false
 );
-
 CREATE TABLE Missions (
-  id string PRIMARY KEY,
-  title string NOT NULL,
-  description text, 
-  assossiationId string NOT NULL,
+  id varchar(50) PRIMARY KEY,
+  title varchar(50) NOT NULL,
+  assossiationId varchar(50) NOT NULL,
+  description text,
   foreign key (assossiationId) references Users(id)
 );
-
 CREATE TABLE Candidatures (
-  id string PRIMARY KEY,
-  idMissions string NOT NULL,
-  idUser string NOT NULL,
-  state string DEFAULT NULL,
-  foreign key (idMissions) references Missions(id)
-  foreign key (idUser) references Missions(id)
+  id varchar(50) PRIMARY KEY,
+  idMissions varchar(50) NOT NULL,
+  idUser varchar(50) NOT NULL,
+  state varchar(50) DEFAULT NULL,
+  foreign key (idMissions) references Missions(id),
+  foreign key (idUser) references Users(id)
 );
-
 -- insert
 INSERT INTO Users VALUES ("0001", 'Clark Sales', 'Clark@mail.fr', "<hashed_password>", false);
 INSERT INTO Users VALUES ("0002", 'Dave Accounting', "DA@outlook.com", "<hashed_password>", false);

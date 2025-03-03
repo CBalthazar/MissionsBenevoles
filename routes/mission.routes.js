@@ -4,13 +4,9 @@ import express from "express";
 const router = express.Router();
 const controller = new MissionController();
 
-// signin
-router.post("/signin", (req, res, next) => {
-  controller.createMission(req, res, next);
-});
-// login
+// create Mission
 router.post("/", (req, res, next) => {
-  controller.readMission(req, res, next);
+  controller.createMission(req, res, next);
 });
 // get info
 router.get("/", (req, res, next) => {

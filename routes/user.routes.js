@@ -19,17 +19,17 @@ router.post("/logout", (req, res, next) => {
 });
 
 // get info
-router.get("/", authToken, (req, res, next) => {
+router.get("/:id", authToken, (req, res, next) => {
   controller.readUser(req, res, next);
 });
 
 // modify info
-router.put("/", authToken, (req, res, next) => {
+router.put("/:id", authToken, (req, res, next) => {
   controller.updateUser(req, res, next);
 });
 
 // delete user
-router.delete("/", authToken, (req, res, next) => {
+router.delete("/:id", authToken, (req, res, next) => {
   controller.deleteUser(req, res, next);
 });
 
