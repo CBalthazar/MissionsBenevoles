@@ -30,9 +30,9 @@ CREATE TABLE Missions (
 
 CREATE TABLE Candidatures (
   id string PRIMARY KEY,
-  state string DEFAULT NULL,
   idMissions string NOT NULL,
   idUser string NOT NULL,
+  state string DEFAULT NULL,
   foreign key (idMissions) references Missions(id)
   foreign key (idUser) references Missions(id)
 );
