@@ -5,19 +5,20 @@ class ApplicationService {
     this.repository = new ApplicationRepository();
   }
 
-  async createApplication() {
-    this.repository.createApplication();
+  async createApplication(idMission, idUser, state) {
+    const id = Math.floor(Math.random() * 1000000).toString();
+    this.repository.createApplication(id, idMission, idUser, state);
   }
 
   async readApplication() {
     this.repository.readApplication();
   }
 
-  async updateApplication() {
-    this.repository.updateApplication();
+  async updateApplication(id, state) {
+    this.repository.updateApplication(id, state);
   }
 
-  async deleteApplicaiton() {
+  async deleteApplicaiton(id) {
     this.repository.deleteApplication();
   }
 }

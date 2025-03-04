@@ -11,10 +11,10 @@ class IncompleteReqException extends BaseException {
   }
 }
 
-class NotAssociationException extends BaseException {
+class RoleException extends BaseException {
   constructor(message) {
     super(401, message);
   }
 }
 
-export { IncompleteReqException, NotAssociationException };
+export { IncompleteReqException, RoleException };

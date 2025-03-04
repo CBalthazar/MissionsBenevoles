@@ -14,12 +14,12 @@ class MissionService {
     this.repository.readMission();
   }
 
-  async updateMission() {
-    this.repository.updateMission();
+  async updateMission(id, change) {
+    this.repository.updateMission(id, change);
   }
 
-  async deleteMission() {
-    this.repository.deleteMission();
+  async deleteMission(id) {
+    this.repository.deleteMission(id);
   }
 }
 

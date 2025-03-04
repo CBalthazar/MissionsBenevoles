@@ -14,6 +14,8 @@ class MissionRepository {
     } catch (err) {
       console.error(err);
       throw new DBException(500, "unexpected issue while posting mission");
+    } finally {
+      if (conn) conn.release();
     }
   }
 
@@ -24,7 +26,9 @@ class MissionRepository {
       const missions = await conn.query("SELECT * FROM Missions");
       return missions;
     } catch (err) {
-      throw new DBException(500, "unexpected issue while retrieving mission");
+      throw new DBException(500, "unexpected issue while retrieving missions");
+    } finally {
+      if (conn) conn.release();
     }
   }
 
@@ -42,10 +46,12 @@ class MissionRepository {
       return result;
     } catch (err) {
       throw new DBException(500, "unexpected issue while updatin mission");
+    } finally {
+      if (conn) conn.release();
     }
   }
 
-  async deleteMissions(id) {
+  async deleteMission(id) {
     let conn;
     try {
       conn = await pool.getConnection();
@@ -53,6 +59,8 @@ class MissionRepository {
       return true;
     } catch (err) {
       throw new DBException(500, "unexpected issue while deleting mission");
+    } finally {
+      if (conn) conn.release();
     }
   }
 }

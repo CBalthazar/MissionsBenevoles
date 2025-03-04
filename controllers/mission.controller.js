@@ -1,6 +1,6 @@
 import MissionService from "../services/mission.service.js";
 import UserService from "../services/user.service.js";
-import { NotAssociationException } from "../errors/server.exceptions.js";
+import { RoleException } from "../errors/server.exceptions.js";
 
 class MissionController {
   constructor() {
@@ -19,7 +19,7 @@ class MissionController {
         mail: req.userMail,
       });
       if (!postingUsers[0].isAssociation) {
-        throw new NotAssociationException(
+        throw new RoleException(
           "you cannot add missions as you are not an association"
         );
       }
@@ -30,7 +30,7 @@ class MissionController {
       );
       res.status(201).json(mission);
     } catch (err) {
-      if (err instanceof NotAssociationException) console.log(err);
+      if (err instanceof RoleException) console.log(err);
       next(err);
     }
   }
@@ -50,7 +50,7 @@ class MissionController {
     try {
       const updatingUsers = this.userService.readUser({ mail: req.userMail });
       if (!updatingUsers[0].isAssociation) {
-        throw new NotAssociationException();
+        throw new RoleException();
       }
 
       let mission = await this.missionService.updateMission(id, modifications);

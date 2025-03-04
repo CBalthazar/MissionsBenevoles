@@ -1,5 +1,5 @@
 import pool from "../database/config.js";
-
+import { DBException } from "../errors/database.exceptions.js";
 class ApplicationRepository {
   async createApplication(id, idMissions, idUser, state = null) {
     let conn;
@@ -11,7 +11,10 @@ class ApplicationRepository {
       );
       return candidature;
     } catch (err) {
-      throw err;
+      console.error(err);
+      throw new DBException(500, "unplanned error whil changing appplications");
+    } finally {
+      if (conn) conn.release();
     }
   }
 
@@ -25,7 +28,13 @@ class ApplicationRepository {
         return await conn.query("SELECT * FROM Candidatures WHERE id=?", [id]);
       }
     } catch (err) {
-      throw err;
+      console.error(err);
+      throw new DBException(
+        500,
+        "unplanned error whil retrieving appplications"
+      );
+    } finally {
+      if (conn) conn.release();
     }
   }
 
@@ -34,12 +43,15 @@ class ApplicationRepository {
     try {
       conn = await pool.getConnection();
       const result = await conn.query(
-        `UPDATE Candidature SET state=? WHERE id=?`,
+        `UPDATE Candidatures SET state=? WHERE id=?`,
         [state, id]
       );
-      return result;
+      return await conn.query("SELECT * FROM Candidatures WHERE id=?", [id]);
     } catch (err) {
-      throw err;
+      console.error(err);
+      throw new DBException(500, "unplanned error whil changing appplications");
+    } finally {
+      if (conn) conn.release();
     }
   }
 
@@ -52,7 +64,13 @@ class ApplicationRepository {
       conn = await pool.getConnection();
       await conn.query("DELETE * FROM Candidatures WHERE ?", ["(" + sql + ")"]);
     } catch (err) {
-      throw err;
+      console.error(err);
+      throw new DBException(
+        500,
+        "unplanned error while deleting appplications"
+      );
+    } finally {
+      if (conn) conn.release();
     }
   }
 }
