@@ -1,28 +1,30 @@
 import pool from "../database/config.js";
+import { DBException } from "../errors/database.exceptions.js";
 
 class MissionRepository {
-  async createMission(id, title, assossiationId, description = "") {
+  async createMission(id, title, description, associationId) {
     let conn;
     try {
       conn = await pool.getConnection();
       const mission = conn.query(
         "INSERT INTO Missions VALUES (?,?,?,?) RETURNING *",
-        [id, title, description, assossiationId]
+        [id, title, associationId, description]
       );
       return mission;
     } catch (err) {
-      throw err;
+      console.error(err);
+      throw new DBException(500, "unexpected issue while posting mission");
     }
   }
 
-  async readMissions() {
+  async readMission() {
     let conn;
     try {
       conn = await pool.getConnection();
       const missions = await conn.query("SELECT * FROM Missions");
       return missions;
     } catch (err) {
-      throw err;
+      throw new DBException(500, "unexpected issue while retrieving mission");
     }
   }
 
@@ -39,7 +41,7 @@ class MissionRepository {
       );
       return result;
     } catch (err) {
-      throw err;
+      throw new DBException(500, "unexpected issue while updatin mission");
     }
   }
 
@@ -50,7 +52,7 @@ class MissionRepository {
       conn.query("DELETE * FROM Missions WHERE id=?", [id]);
       return true;
     } catch (err) {
-      throw err;
+      throw new DBException(500, "unexpected issue while deleting mission");
     }
   }
 }

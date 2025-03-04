@@ -1,32 +1,44 @@
 import MissionService from "../services/mission.service.js";
+import UserService from "../services/user.service.js";
+import { NotAssociationException } from "../errors/server.exceptions.js";
 
 class MissionController {
   constructor() {
-    this.service = new MissionService();
+    this.missionService = new MissionService();
+    this.userService = new UserService();
   }
 
   async createMission(req, res, next) {
-    if (!req.body?.title || !req.body.description || !req.body.associationId) {
+    if (!req.body?.title) {
       res.status(400).json({ message: "Error : Bad Request Body" });
     }
-    const { title, description, associationId } = req.body;
+    const { title } = req.body;
+    const description = req.body.description || "";
     try {
-      let mission = this.service.createMission(
+      const postingUsers = await this.userService.readUser({
+        mail: req.userMail,
+      });
+      if (!postingUsers[0].isAssociation) {
+        throw new NotAssociationException(
+          "you cannot add missions as you are not an association"
+        );
+      }
+      let mission = this.missionService.createMission(
         title,
         description,
-        associationId
+        postingUsers[0].id
       );
       res.status(201).json(mission);
     } catch (err) {
+      if (err instanceof NotAssociationException) console.log(err);
       next(err);
     }
   }
 
   async readMission(req, res, next) {
-    let id = req.params.id;
     try {
-      let aission = await this.service.readMission(id);
-      res.status(200).json(aission);
+      let mission = await this.missionService.readMission();
+      res.status(200).json(mission);
     } catch (err) {
       next(err);
     }
@@ -36,8 +48,13 @@ class MissionController {
     let id = req.params.id;
     let modifications = req.body;
     try {
-      let aission = await this.service.updateMission(id, modifications);
-      res.status(200).json(aission);
+      const updatingUsers = this.userService.readUser({ mail: req.userMail });
+      if (!updatingUsers[0].isAssociation) {
+        throw new NotAssociationException();
+      }
+
+      let mission = await this.missionService.updateMission(id, modifications);
+      res.status(200).json(mission);
     } catch (err) {
       next(err);
     }
@@ -46,8 +63,8 @@ class MissionController {
   async deleteMission(req, res, next) {
     let id = req.params.id;
     try {
-      this.service.deleteMission(id);
-      res.status(200).json({ message: "aission deleted" });
+      this.missionService.deleteMission(id);
+      res.status(200).json({ message: "mission deleted" });
     } catch (err) {
       next(err);
     }

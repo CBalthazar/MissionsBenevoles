@@ -1,8 +1,20 @@
-class IncompleteReqException extends Error {
+class BaseException extends Error {
   constructor(code, message) {
     super(message);
     this.code = code;
   }
 }
 
-export { IncompleteReqException };
+class IncompleteReqException extends BaseException {
+  constructor(message) {
+    super(400, message);
+  }
+}
+
+class NotAssociationException extends BaseException {
+  constructor(message) {
+    super(401, message);
+  }
+}
+
+export { IncompleteReqException, NotAssociationException };

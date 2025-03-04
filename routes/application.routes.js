@@ -4,25 +4,21 @@ import express from "express";
 const router = express.Router();
 const controller = new ApplicationController();
 
-// signin
-router.post("/signin", (req, res, next) => {
-  controller.createapplication(req, res, next);
-});
-// login
+// create Application
 router.post("/", (req, res, next) => {
-  controller.readapplication(req, res, next);
+  controller.createApplication(req, res, next);
 });
 // get info
 router.get("/", (req, res, next) => {
-  controller.readapplication(req, res, next);
+  controller.readApplication(req, res, next);
 });
 // modify info
 router.put("/", (req, res, next) => {
-  controller.updateapplication(req, res, next);
+  controller.updateApplication(req, res, next);
 });
 // delete application
 router.delete("/", (req, res, next) => {
-  controller.deleteapplication(req, res, next);
+  controller.deleteApplication(req, res, next);
 });
 
 export default router;

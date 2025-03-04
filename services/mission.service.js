@@ -5,8 +5,9 @@ class MissionService {
     this.repository = new MissionRepository();
   }
 
-  async createMission() {
-    this.repository.createMission();
+  async createMission(title, description, associationId) {
+    const id = Math.floor(Math.random() * 1000000).toString();
+    this.repository.createMission(id, title, description, associationId);
   }
 
   async readMission() {

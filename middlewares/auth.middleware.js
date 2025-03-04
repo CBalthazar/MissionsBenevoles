@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import "dotenv/config";
 
 function authToken(req, res, next) {
   try {
@@ -12,13 +13,14 @@ function authToken(req, res, next) {
 
     const actualToken = token.split("=")[1];
 
-    jwt.verify(actualToken, process.env.JWT_SECRET_KEY, (err, user) => {
+    jwt.verify(actualToken, process.env.JWT_SECRET_KEY, (err, decoded) => {
       if (err) return res.status(403).json({ message: "Token invalide" });
-      req.user = user;
+      req.userMail = decoded.mail;
       next();
     });
   } catch (err) {
     console.log(err);
+    next(err);
   }
 }
 

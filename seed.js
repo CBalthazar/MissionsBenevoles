@@ -10,8 +10,7 @@ const pool = createPool({
 });
 
 const sql_tables = `
-USE ${process.env.DATABASE};
-
+USE ${process.env.DATABASE};S
 DROP TABLE IF EXISTS Candidatures;
 DROP TABLE IF EXISTS  Missions;
 DROP TABLE  IF EXISTS Users;
@@ -21,14 +20,14 @@ CREATE TABLE Users (
   fullname varchar(50) NOT NULL,
   mail varchar(50) NOT NULL,
   password varchar(50) NOT NULL,
-  isAssossiation boolean NOT NULL DEFAULT false
+  isassociation boolean NOT NULL DEFAULT false
 );
 CREATE TABLE Missions (
   id varchar(50) PRIMARY KEY,
   title varchar(50) NOT NULL,
-  assossiationId varchar(50) NOT NULL,
+  associationId varchar(50) NOT NULL,
   description text,
-  foreign key (assossiationId) references Users(id)
+  foreign key (associationId) references Users(id)
 );
 CREATE TABLE Candidatures (
   id varchar(50) PRIMARY KEY,

@@ -34,20 +34,24 @@ class UserController {
     }
     const { mail, password } = req.body;
 
-    let user;
+    let users;
     try {
-      user = await this.service.readUser({ mail: mail });
+      users = await this.service.readUser({ mail: mail });
     } catch (err) {
       console.log("error while logging, user could not be fetched");
     }
 
-    if (!user || !(await argon2.verify(user[0].password, password))) {
+    if (!users[0] || !(await argon2.verify(users[0].password, password))) {
       return res.status(401).json({ message: "Identifiants incorrects" });
     }
 
-    const token = jwt.sign({ mail: user.mail }, process.env.JWT_SECRET_KEY, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      { mail: users[0].mail },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -56,7 +60,7 @@ class UserController {
       expires: new Date(Date.now() + 60 * 60 * 1000),
     });
 
-    res.status(200).json({ user: user });
+    res.status(200).json({ user: users[0] });
   }
 
   async logoutUser(req, res, next) {
