@@ -12,21 +12,21 @@ class ApplicationController {
   }
 
   async createApplication(req, res, next) {
-    if (!req.body?.idUser || !req.body.idMission)
-      throw new IncompleteReqException("Bad Request");
-    const { idUser, idMission } = req.body;
-    const state = req.body.state || null;
-
     try {
+      if (!req.body?.idUser || !req.body.idMission)
+        throw new IncompleteReqException("Bad Request");
+      const { idUser, idMission } = req.body;
+      const state = req.body.state || null;
       const applicants = await this.userService.readUser({
         mail: req.userMail,
       });
+
       if (applicants[0].isAssociation) {
         throw new RoleException("Associations cannot apply to missions ");
       }
       let application = await this.applicationService.createApplication(
-        idMission,
-        idUser,
+        idMission.toString(),
+        idUser.toString(),
         state
       );
       res.status(201).json(application);

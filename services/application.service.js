@@ -7,19 +7,19 @@ class ApplicationService {
 
   async createApplication(idMission, idUser, state) {
     const id = Math.floor(Math.random() * 1000000).toString();
-    this.repository.createApplication(id, idMission, idUser, state);
+    return this.repository.createApplication(id, idMission, idUser, state);
   }
 
   async readApplication() {
-    this.repository.readApplication();
+    return this.repository.readApplication();
   }
 
   async updateApplication(id, state) {
-    this.repository.updateApplication(id, state);
+    return this.repository.updateApplication(id, state);
   }
 
   async deleteApplicaiton(id) {
-    this.repository.deleteApplication();
+    return this.repository.deleteApplication();
   }
 }
 

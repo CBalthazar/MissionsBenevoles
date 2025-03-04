@@ -5,7 +5,9 @@ class ApplicationRepository {
     let conn;
     try {
       conn = await pool.getConnection();
-      let candidature = conn.query(
+
+      console.log(idMissions);
+      let candidature = await conn.query(
         "INSERT INTO Candidatures VALUES (?,?,?,?) RETURNING *",
         [id, idMissions, idUser, state]
       );
@@ -42,10 +44,10 @@ class ApplicationRepository {
     let conn;
     try {
       conn = await pool.getConnection();
-      const result = await conn.query(
-        `UPDATE Candidatures SET state=? WHERE id=?`,
-        [state, id]
-      );
+      await conn.query(`UPDATE Candidatures SET state=? WHERE id=?`, [
+        state,
+        id,
+      ]);
       return await conn.query("SELECT * FROM Candidatures WHERE id=?", [id]);
     } catch (err) {
       console.error(err);

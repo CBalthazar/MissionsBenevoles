@@ -23,7 +23,7 @@ class MissionController {
           "you cannot add missions as you are not an association"
         );
       }
-      let mission = this.missionService.createMission(
+      let mission = await this.missionService.createMission(
         title,
         description,
         postingUsers[0].id

@@ -7,19 +7,19 @@ class MissionService {
 
   async createMission(title, description, associationId) {
     const id = Math.floor(Math.random() * 1000000).toString();
-    this.repository.createMission(id, title, description, associationId);
+    return this.repository.createMission(id, title, description, associationId);
   }
 
   async readMission() {
-    this.repository.readMission();
+    return this.repository.readMission();
   }
 
   async updateMission(id, change) {
-    this.repository.updateMission(id, change);
+    return this.repository.updateMission(id, change);
   }
 
   async deleteMission(id) {
-    this.repository.deleteMission(id);
+    return this.repository.deleteMission(id);
   }
 }
 
