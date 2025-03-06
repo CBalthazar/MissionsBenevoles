@@ -9,7 +9,7 @@ function authToken(req, res, next) {
     const token = cookies
       .split(";")
       .find((cookie) => cookie.trim().startsWith("token="));
-    if (!token) return res.stat + us(401).json({ message: "Accès refusé" });
+    if (!token) return res.status(401).json({ message: "Accès refusé" });
 
     const actualToken = token.split("=")[1];
 

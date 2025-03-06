@@ -1,0 +1,9 @@
+- pas de booléen pour les rôles
+- table association
+- emploi du temps
+- token id
+- service lisible (à refaire)
+  trop de généralisation, rends difficile voire impossible la vérification des routes
+- faire middleware de gestion des roles
+- gerer l'inexistence des données en BDD
+- non apparition des mots de passe

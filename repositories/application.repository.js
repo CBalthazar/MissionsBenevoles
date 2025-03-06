@@ -1,4 +1,4 @@
-import pool from "../database/config.js";
+import pool from "../config/db.js";
 import { DBException } from "../errors/database.exceptions.js";
 class ApplicationRepository {
   async createApplication(id, idMissions, idUser, state = null) {

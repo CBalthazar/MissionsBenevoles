@@ -37,30 +37,31 @@ class UserController {
     let users;
     try {
       users = await this.service.readUser({ mail: mail });
-    } catch (err) {
-      console.log("error while logging, user could not be fetched");
-    }
 
-    if (!users[0] || !(await argon2.verify(users[0].password, password))) {
-      return res.status(401).json({ message: "Identifiants incorrects" });
-    }
-
-    const token = jwt.sign(
-      { mail: users[0].mail },
-      process.env.JWT_SECRET_KEY,
-      {
-        expiresIn: "1h",
+      if (!users[0] || !(await argon2.verify(users[0].password, password))) {
+        return res.status(401).json({ message: "Identifiants incorrects" });
       }
-    );
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
-      expires: new Date(Date.now() + 60 * 60 * 1000),
-    });
+      const token = jwt.sign(
+        { mail: users[0].mail },
+        process.env.JWT_SECRET_KEY,
+        {
+          expiresIn: "1h",
+        }
+      );
 
-    res.status(200).json({ user: users[0] });
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "Strict",
+        expires: new Date(Date.now() + 60 * 60 * 1000),
+      });
+
+      const { id, fullname } = users[0];
+      res.status(200).json({ id, fullname, mail });
+    } catch (err) {
+      console.log("error while logging");
+    }
   }
 
   async logoutUser(req, res, next) {

@@ -1,4 +1,4 @@
-import pool from "../database/config.js";
+import pool from "../config/db.js";
 import { objectToSQL } from "../tools/tools.js";
 import { DBException } from "../errors/database.exceptions.js";
 class UserRepository {
@@ -24,7 +24,8 @@ class UserRepository {
     try {
       conn = await pool.getConnection();
       const conditions = objectToSQL(cond);
-      const user = await conn.query(`SELECT * FROM Users WHERE ${conditions}`);
+      const user = await conn.query(`SELECT id FROM Users WHERE ${conditions}`);
+      console.log(user);
       return user;
     } catch (err) {
       console.log(err);
